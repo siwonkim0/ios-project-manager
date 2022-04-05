@@ -11,6 +11,8 @@
 		70C75EF4C0698925773860FB /* Pods_ProjectManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E353B5FABF07E6030E5DDB /* Pods_ProjectManager.framework */; };
 		A615758027ECB98F00F9FB62 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A615757F27ECB98E00F9FB62 /* ViewModelType.swift */; };
 		A62BB67D27D1B532009395D8 /* UITableView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A62BB67C27D1B532009395D8 /* UITableView+extension.swift */; };
+		A645327627FA890D00190CCE /* RemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A645327527FA890D00190CCE /* RemoteDataSource.swift */; };
+		A645327827FA89FD00190CCE /* DataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A645327727FA89FD00190CCE /* DataSourceProtocol.swift */; };
 		A6541F6D27CF3A3900F576D4 /* ProjectListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6541F6C27CF3A3900F576D4 /* ProjectListTableView.swift */; };
 		A6541F6F27CF3AC600F576D4 /* ProjectListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6541F6E27CF3AC600F576D4 /* ProjectListTableViewCell.swift */; };
 		A6989AE827D71A4500E29876 /* ProjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6989AE727D71A4500E29876 /* ProjectDetailView.swift */; };
@@ -56,6 +58,8 @@
 		9FF5E0D96C5531AEE7F6FAEF /* Pods-ProjectManagerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectManagerTests.release.xcconfig"; path = "Target Support Files/Pods-ProjectManagerTests/Pods-ProjectManagerTests.release.xcconfig"; sourceTree = "<group>"; };
 		A615757F27ECB98E00F9FB62 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		A62BB67C27D1B532009395D8 /* UITableView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+extension.swift"; sourceTree = "<group>"; };
+		A645327527FA890D00190CCE /* RemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataSource.swift; sourceTree = "<group>"; };
+		A645327727FA89FD00190CCE /* DataSourceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceProtocol.swift; sourceTree = "<group>"; };
 		A6541F6C27CF3A3900F576D4 /* ProjectListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListTableView.swift; sourceTree = "<group>"; };
 		A6541F6E27CF3AC600F576D4 /* ProjectListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListTableViewCell.swift; sourceTree = "<group>"; };
 		A6989AE727D71A4500E29876 /* ProjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailView.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 			isa = PBXGroup;
 			children = (
 				A6B62A2727D9D1D80080C0D5 /* ProjectRepository.swift */,
+				A645327727FA89FD00190CCE /* DataSourceProtocol.swift */,
+				A645327527FA890D00190CCE /* RemoteDataSource.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -440,6 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A645327827FA89FD00190CCE /* DataSourceProtocol.swift in Sources */,
 				A615758027ECB98F00F9FB62 /* ViewModelType.swift in Sources */,
 				EA4C970327D5EFBF002929B8 /* ProjectListViewModel.swift in Sources */,
 				EA03ABC927E31BCD00084E75 /* Collection+extension.swift in Sources */,
@@ -457,6 +464,7 @@
 				EA03AB5D27E20C1700084E75 /* EditProjectDetailViewModel.swift in Sources */,
 				A6B62A2627D9D1390080C0D5 /* ProjectUseCase.swift in Sources */,
 				C7431F0825F51E1D0094C4CF /* SceneDelegate.swift in Sources */,
+				A645327627FA890D00190CCE /* RemoteDataSource.swift in Sources */,
 				EAD6911B27CF5B7C001DFDC8 /* ProjectListTableHeaderView.swift in Sources */,
 				EA03AB2327DF1B1C00084E75 /* ProjectState.swift in Sources */,
 				A6541F6D27CF3A3900F576D4 /* ProjectListTableView.swift in Sources */,

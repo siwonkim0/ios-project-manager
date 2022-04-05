@@ -21,13 +21,13 @@ final class ProjectUseCase: ProjectUseCaseProtocol {
     func bindProjects() -> Observable<[Project]> {
         return projectRepository.bindProjects()
             .map {
-                $0.map { $0.value }
-                .sorted { $0.date > $1.date }
+                $0.sorted { $0.date > $1.date }
             }
     }
     
     func fetch(with id: UUID) -> Project? {
-        return projectRepository.bindProjects().value[id]
+        return projectRepository.bindProjects().value
+            .filter { $0.id == id }.first
     }
     
     func append(_ project: Project) {
