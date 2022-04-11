@@ -26,4 +26,15 @@ enum ProjectState: String {
             return "Move to Done"
         }
     }
+    
+    var string: String {
+        switch self {
+        case .todo:
+            return "todo"
+        case .doing:
+            return "doing"
+        case .done:
+            return "done"
+        }
+    }
 }

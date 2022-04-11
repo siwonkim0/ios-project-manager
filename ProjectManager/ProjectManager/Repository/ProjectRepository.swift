@@ -10,55 +10,41 @@ protocol ProjectRepositoryProtocol {
 }
 
 final class ProjectRepository: ProjectRepositoryProtocol {
-    private let disposeBag = DisposeBag()
-    private let remoteDataSource: DataSourceProtocol
-    
+    let disposeBag = DisposeBag()
+    let remoteDataSource = RemoteDataSource()
     private lazy var projects = BehaviorRelay<[Project]>(value: [])
-    
-    init(remoteDataSource: DataSourceProtocol) {
-        self.remoteDataSource = remoteDataSource
-    }
     
     func bindProjects() -> BehaviorRelay<[Project]> {
         remoteDataSource.fetch()
-            .subscribe(onSuccess: { [weak self] event in
-                self?.projects.accept(event)
-            }).disposed(by: disposeBag)
+            .subscribe(onSuccess: { fetchedProjects in
+            self.projects.accept(fetchedProjects)
+        }).disposed(by: disposeBag)
         return projects
     }
     
     func append(_ project: Project) {
+        var currentProjects = projects.value
+        currentProjects.append(project)
+        projects.accept(currentProjects)
         remoteDataSource.append(project)
-            .subscribe(onCompleted: { [weak projects] in
-                var currentProjects = projects?.value
-                currentProjects?.append(project)
-                projects?.accept(currentProjects ?? [])
-            }).disposed(by: disposeBag)
     }
     
     func update(_ project: Project) {
+        var currentProjects = projects.value
+        if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+            currentProjects[row] = project
+        }
+        currentProjects.sort { $0.date > $1.date }
+        projects.accept(currentProjects) //왜 completable 안써도 업데이트되지.. 이때 BehaviorRelay에 값을 전달하면 자동으로 업데이트되나
         remoteDataSource.update(project)
-            .subscribe(onCompleted: { [weak projects] in
-                guard var currentProjects = projects?.value,
-                      let index = currentProjects.firstIndex(of: project) else {
-                    return
-                }
-                currentProjects[index] = project
-                
-                projects?.accept(currentProjects)
-            }).disposed(by: disposeBag)
     }
     
     func delete(_ project: Project) {
+        var currentProjects = projects.value
+        if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+            currentProjects.remove(at: row)
+        }
+        projects.accept(currentProjects)
         remoteDataSource.delete(project)
-            .subscribe(onCompleted: { [weak projects] in
-                guard var currentProjects = projects?.value,
-                      let index = currentProjects.firstIndex(of: project) else {
-                    return
-                }
-                currentProjects.remove(at: index)
-                
-                projects?.accept(currentProjects)
-            }).disposed(by: disposeBag)
     }
 }
