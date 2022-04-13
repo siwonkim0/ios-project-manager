@@ -37,6 +37,9 @@
 		EA4C96E127D0A562002929B8 /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4C96E027D0A562002929B8 /* UIView+extension.swift */; };
 		EA4C970327D5EFBF002929B8 /* ProjectListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4C970227D5EFBF002929B8 /* ProjectListViewModel.swift */; };
 		EA4C970927D70E56002929B8 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4C970827D70E56002929B8 /* Project.swift */; };
+		EA64FA13280403FF00FB6993 /* LocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA64FA12280403FF00FB6993 /* LocalDataSource.swift */; };
+		EA64FA152804116100FB6993 /* ProjectRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA64FA142804116100FB6993 /* ProjectRealm.swift */; };
+		EA64FA172805EB2A00FB6993 /* NetworkChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */; };
 		EAD690F927CE6F6E001DFDC8 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = EAD690F827CE6F6E001DFDC8 /* .swiftlint.yml */; };
 		EAD6911B27CF5B7C001DFDC8 /* ProjectListTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD6911A27CF5B7C001DFDC8 /* ProjectListTableHeaderView.swift */; };
 /* End PBXBuildFile section */
@@ -88,6 +91,9 @@
 		EA4C971027DB0B11002929B8 /* ProjectManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProjectManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA4C971227DB0B11002929B8 /* ProjectManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectManagerTests.swift; sourceTree = "<group>"; };
 		EA4C971C27DB0D52002929B8 /* MockProjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProjectRepository.swift; sourceTree = "<group>"; };
+		EA64FA12280403FF00FB6993 /* LocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataSource.swift; sourceTree = "<group>"; };
+		EA64FA142804116100FB6993 /* ProjectRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRealm.swift; sourceTree = "<group>"; };
+		EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkChecker.swift; sourceTree = "<group>"; };
 		EAD690F827CE6F6E001DFDC8 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		EAD6911A27CF5B7C001DFDC8 /* ProjectListTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListTableHeaderView.swift; sourceTree = "<group>"; };
 		F690FAC1582D2A2CCC057B93 /* Pods-ProjectManagerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectManagerTests.debug.xcconfig"; path = "Target Support Files/Pods-ProjectManagerTests/Pods-ProjectManagerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -145,8 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				A6B62A2727D9D1D80080C0D5 /* ProjectRepository.swift */,
-				A645327727FA89FD00190CCE /* DataSourceProtocol.swift */,
-				A645327527FA890D00190CCE /* RemoteDataSource.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -208,6 +212,8 @@
 			isa = PBXGroup;
 			children = (
 				C7431F0425F51E1D0094C4CF /* ProjectManager */,
+				EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */,
+				EA64FA182806ECF200FB6993 /* DataSource */,
 				EA4C971127DB0B11002929B8 /* ProjectManagerTests */,
 				C7431F0325F51E1D0094C4CF /* Products */,
 				1EA0EEF972F63C946A1868FB /* Pods */,
@@ -254,6 +260,7 @@
 			children = (
 				EA4C970827D70E56002929B8 /* Project.swift */,
 				EA03AB2227DF1B1C00084E75 /* ProjectState.swift */,
+				EA64FA142804116100FB6993 /* ProjectRealm.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -276,6 +283,16 @@
 				EA03AB2127DB4C8D00084E75 /* Test Double */,
 			);
 			path = ProjectManagerTests;
+			sourceTree = "<group>";
+		};
+		EA64FA182806ECF200FB6993 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				A645327727FA89FD00190CCE /* DataSourceProtocol.swift */,
+				A645327527FA890D00190CCE /* RemoteDataSource.swift */,
+				EA64FA12280403FF00FB6993 /* LocalDataSource.swift */,
+			);
+			path = DataSource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,8 +473,11 @@
 				A6989AEC27D7240500E29876 /* ProjectDetailViewController.swift in Sources */,
 				C7431F0A25F51E1D0094C4CF /* ProjectListViewController.swift in Sources */,
 				EA4C96E127D0A562002929B8 /* UIView+extension.swift in Sources */,
+				EA64FA13280403FF00FB6993 /* LocalDataSource.swift in Sources */,
+				EA64FA172805EB2A00FB6993 /* NetworkChecker.swift in Sources */,
 				C7431F0625F51E1D0094C4CF /* AppDelegate.swift in Sources */,
 				EA4C96DF27D091BE002929B8 /* AddProjectDetailViewController.swift in Sources */,
+				EA64FA152804116100FB6993 /* ProjectRealm.swift in Sources */,
 				EA03AB5F27E234B200084E75 /* AddProjectDetailViewModel.swift in Sources */,
 				EA4C970927D70E56002929B8 /* Project.swift in Sources */,
 				A6B62A2827D9D1D80080C0D5 /* ProjectRepository.swift in Sources */,
