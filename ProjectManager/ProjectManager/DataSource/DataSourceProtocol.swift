@@ -1,8 +1,8 @@
 import RxSwift
 
 protocol DataSourceProtocol {
-    func append(_ project: Project)
-    func delete(_ project: Project)
-    func update(_ project: Project)
     func fetch() -> Single<[Project]>
+    func append(_ project: Project) -> Completable
+    func update(_ project: Project) -> Completable
+    func delete(_ project: Project) -> Completable
 }

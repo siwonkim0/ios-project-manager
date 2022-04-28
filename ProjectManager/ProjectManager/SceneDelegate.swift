@@ -11,7 +11,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         window = UIWindow(windowScene: windowScene)
         let remoteDataSource = RemoteDataSource()
-        let repository = ProjectRepository()
+        let localDataSource = LocalDataSource()
+        let repository = ProjectRepository(remoteDataSource: remoteDataSource, localDataSource: localDataSource)
         let useCase = ProjectUseCase(repository: repository)
         let viewModel = ProjectListViewModel(useCase: useCase)
         

@@ -23,7 +23,10 @@ extension Project {
                 "title": self.title,
                 "body": self.body,
                 "date": self.date,
-                "state": self.state.string]
+                "state": self.state.string,
+                "updatedAt": self.updatedAt,
+                "deletedAt": self.deletedAt
+        ]
     }
     
     init?(document: [String: Any]) {
@@ -33,7 +36,8 @@ extension Project {
               let body = document["body"] as? String,
               let date = document["date"] as? Timestamp,
               let stateString = document["state"] as? String,
-              let state = ProjectState(rawValue: stateString)
+              let state = ProjectState(rawValue: stateString),
+              let updatedAt = document["updatedAt"] as? Timestamp
         else {
             return nil
         }
@@ -43,7 +47,7 @@ extension Project {
         self.title = title
         self.body = body
         self.date = date.dateValue()
-        self.updatedAt = Date()
+        self.updatedAt = updatedAt.dateValue()
     }
 }
 

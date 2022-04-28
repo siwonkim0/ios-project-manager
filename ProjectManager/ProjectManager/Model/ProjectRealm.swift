@@ -16,7 +16,7 @@ class ProjectRealm: Object {
 }
 
 extension ProjectRealm {
-    convenience init?(_ project: Project) {
+    convenience init(_ project: Project) {
         self.init()
         self.id = project.id
         self.state = project.state.string

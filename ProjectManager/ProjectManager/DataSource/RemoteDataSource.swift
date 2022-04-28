@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import FirebaseFirestore
 
-class RemoteDataSource {
+class RemoteDataSource: DataSourceProtocol {
     let dataBase = Firestore.firestore()
     
     func fetch() -> Single<[Project]> {

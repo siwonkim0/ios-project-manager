@@ -2,19 +2,9 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-class LocalDataSource {
+class LocalDataSource: DataSourceProtocol {
     lazy var realm = try! Realm()
-    var projectsToSyncronize = [Project]()
     let networkChecker = NetworkChecker.shared
-    
-    func syncronize(with project: Project) {
-        let memo = ProjectRealm(project)
-        if NetworkChecker.shared.isConnected == true {
-            try! realm.write {
-                realm.add(memo!, update: .modified)
-            }
-        }
-    }
     
     func fetch() -> Single<[Project]> {
         var projects = [Project]()
@@ -28,33 +18,41 @@ class LocalDataSource {
         }
     }
 
-    func append(_ project: Project) {
-        guard let memo = ProjectRealm(project) else {
-            return
-        }
-        try! realm.write {
-            realm.add(memo)
-        }
-    }
-
-    func update(_ project: Project) {
-        guard let memo = ProjectRealm(project) else {
-            return
-        }
-        try! realm.write {
-            memo.updatedAt = Date()
-            realm.add(memo, update: .modified)
+    func append(_ project: Project) -> Completable {
+        return Completable.create { [self] completable in
+            let memo = ProjectRealm(project)
+            try! self.realm.write {
+                self.realm.add(memo)
+            }
+            completable(.completed)
+            return Disposables.create()
         }
     }
 
-    func delete(_ project: Project) {
-        guard let memo = realm.objects(ProjectRealm.self).filter("id = %@", project.id).first else {
-            return
+    func update(_ project: Project) -> Completable {
+        return Completable.create { [self] completable in
+            let memo = ProjectRealm(project)
+            try! self.realm.write {
+                memo.updatedAt = Date()
+                print(memo.updatedAt)
+                self.realm.add(memo, update: .modified)
+            }
+            completable(.completed)
+            return Disposables.create()
         }
-        
-        try! realm.write {
-            memo.deletedAt = Date() //어짜피 삭제되어서 할필요 없긴함
-            realm.delete(memo)
+    }
+
+    func delete(_ project: Project) -> Completable {
+        return Completable.create { [self] completable in
+            let memo = self.realm.objects(ProjectRealm.self).where { projectRealm in
+                projectRealm.id == project.id
+            }
+            
+            try! self.realm.write {
+                self.realm.delete(memo)
+            }
+            completable(.completed)
+            return Disposables.create()
         }
     }
 }

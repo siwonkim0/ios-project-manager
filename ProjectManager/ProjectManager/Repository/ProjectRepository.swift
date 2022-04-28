@@ -11,10 +11,15 @@ protocol ProjectRepositoryProtocol {
 
 final class ProjectRepository: ProjectRepositoryProtocol {
     let disposeBag = DisposeBag()
-    let remoteDataSource = RemoteDataSource()
-    let localDataSource = LocalDataSource()
+    let remoteDataSource: DataSourceProtocol
+    let localDataSource: DataSourceProtocol
     let networkConnection = NetworkChecker.shared
     private lazy var projects = BehaviorRelay<[Project]>(value: [])
+    
+    init(remoteDataSource: DataSourceProtocol, localDataSource: DataSourceProtocol) {
+        self.remoteDataSource = remoteDataSource
+        self.localDataSource = localDataSource
+    }
     
     func fetchData() -> BehaviorRelay<[Project]> {
 //        networkConnection.isConnected = false
@@ -23,8 +28,8 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                 .subscribe(onCompleted: {
                     self.remoteDataSource.fetch().subscribe(onSuccess: { p in
                         self.projects.accept(p)
-                    })
-                })
+                    }).disposed(by: self.disposeBag)
+                }).disposed(by: disposeBag)
             
         } else {
             localDataSource.fetch()
@@ -47,6 +52,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let locallyAppendedProjects = localProjects.filter {
                 locallyAppendedIDSet.contains($0.id)
             }
+            print("locallyAppendedProjects", locallyAppendedProjects)
             
             let appendCompletable = Completable.zip(locallyAppendedProjects.map {
                 self.remoteDataSource.append($0)
@@ -59,17 +65,23 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let intersectingRemoteProjects = remoteProjects.filter {
                 intersectingIDSet.contains($0.id)
             }
+            print("intersectingLocalProjects", intersectingLocalProjects)
             
-            let sameIDCompletable = Completable.zip(intersectingRemoteProjects.flatMap { remoteProject in
-                intersectingLocalProjects.filter { localProject in
-                    localProject.id == remoteProject.id && localProject.updatedAt > remoteProject.updatedAt
-                }.map { self.remoteDataSource.update($0) }
-            })
-            
+            let sameIDCompletable = Completable.zip(
+                intersectingRemoteProjects.flatMap { remoteProject in
+                    intersectingLocalProjects.filter { localProject in
+                        localProject.updatedAt > remoteProject.updatedAt
+                    }.map {
+                        return self.remoteDataSource.update($0)
+                    }
+                }
+            )
+
             let deletedIDSet = remoteIDSet.subtracting(localIDSet)
-            let locallyDeletedProjects = localProjects.filter {
+            let locallyDeletedProjects = remoteProjects.filter {
                 deletedIDSet.contains($0.id)
             }
+            print("locallyDeletedProjects", locallyDeletedProjects)
             let deletedCompletable = Completable.zip(locallyDeletedProjects.map {
                 self.remoteDataSource.delete($0)
             })
@@ -79,41 +91,76 @@ final class ProjectRepository: ProjectRepositoryProtocol {
     }
     
     func append(_ project: Project) {
-        var currentProjects = projects.value
-        currentProjects.append(project)
-        projects.accept(currentProjects)
-        
         if networkConnection.isConnected == true {
-            remoteDataSource.append(project)
+            Completable.zip(
+                remoteDataSource.append(project),
+                localDataSource.append(project)
+            ).subscribe(onCompleted: { [self] in
+                var currentProjects = projects.value
+                currentProjects.append(project)
+                projects.accept(currentProjects)
+            }).disposed(by: disposeBag)
+        } else {
+            localDataSource.append(project)
+            .subscribe(onCompleted: { [self] in
+                var currentProjects = projects.value
+                currentProjects.append(project)
+                projects.accept(currentProjects)
+            }).disposed(by: disposeBag)
         }
-        localDataSource.append(project)
-        
     }
     
     func update(_ project: Project) {
-        var currentProjects = projects.value
-        if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-            currentProjects[row] = project
-        }
-        currentProjects.sort { $0.date > $1.date }
-        projects.accept(currentProjects) //왜 completable 안써도 업데이트되지..
-        
         if networkConnection.isConnected == true {
-            remoteDataSource.update(project)
+            Completable.zip(
+                remoteDataSource.update(project),
+                localDataSource.update(project)
+            )
+                .subscribe(onCompleted: { [self] in
+                    var currentProjects = projects.value
+                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+                        currentProjects[row] = project
+                    }
+                    currentProjects.sort { $0.date > $1.date }
+                    projects.accept(currentProjects)
+                }).disposed(by: disposeBag)
+        } else {
+            localDataSource.update(project)
+                .subscribe(onCompleted: { [self] in
+                    var currentProjects = projects.value
+                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+                        currentProjects[row] = project
+                    }
+                    currentProjects.sort { $0.date > $1.date }
+                    projects.accept(currentProjects)
+                }).disposed(by: disposeBag)
         }
-        localDataSource.update(project)
+        
     }
     
     func delete(_ project: Project) {
-        var currentProjects = projects.value
-        if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-            currentProjects.remove(at: row)
-        }
-        projects.accept(currentProjects)
-        
         if networkConnection.isConnected == true {
-            remoteDataSource.delete(project)
+            Completable.zip(
+                remoteDataSource.delete(project),
+                localDataSource.delete(project)
+            ).subscribe(onCompleted: { [self] in
+                var currentProjects = projects.value
+                if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+                    currentProjects.remove(at: row)
+                }
+                projects.accept(currentProjects)
+            }).disposed(by: disposeBag)
+            
+        } else {
+            localDataSource.delete(project)
+                .subscribe(onCompleted: { [self] in
+                    var currentProjects = projects.value
+                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
+                        currentProjects.remove(at: row)
+                    }
+                    projects.accept(currentProjects)
+                }).disposed(by: disposeBag)
         }
-        localDataSource.delete(project)
+        
     }
 }
