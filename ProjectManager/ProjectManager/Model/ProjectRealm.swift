@@ -7,6 +7,8 @@ class ProjectRealm: Object {
     @objc dynamic var title: String = ""
     @objc dynamic var body: String = ""
     @objc dynamic var date: Date = Date()
+    @objc dynamic var deletedAt: Date?
+    @objc dynamic var updatedAt: Date = Date()
     
     override static func primaryKey() -> String? {
         return "id"
@@ -21,5 +23,6 @@ extension ProjectRealm {
         self.title = project.title
         self.body = project.body
         self.date = project.date
+        self.updatedAt = project.updatedAt
     }
 }

@@ -213,7 +213,6 @@
 			children = (
 				C7431F0425F51E1D0094C4CF /* ProjectManager */,
 				EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */,
-				EA64FA182806ECF200FB6993 /* DataSource */,
 				EA4C971127DB0B11002929B8 /* ProjectManagerTests */,
 				C7431F0325F51E1D0094C4CF /* Products */,
 				1EA0EEF972F63C946A1868FB /* Pods */,
@@ -242,6 +241,7 @@
 				A61B438627DCAB39009DF5C5 /* Domain */,
 				A61B438727DCAB46009DF5C5 /* Repository */,
 				A62BB67E27D1B553009395D8 /* Extension */,
+				EA64FA182806ECF200FB6993 /* DataSource */,
 				A62BB67F27D1B57F009395D8 /* Resource */,
 			);
 			path = ProjectManager;

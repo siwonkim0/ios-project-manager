@@ -4,6 +4,8 @@ import RxSwift
 
 class LocalDataSource {
     lazy var realm = try! Realm()
+    var projectsToSyncronize = [Project]()
+    let networkChecker = NetworkChecker.shared
     
     func syncronize(with project: Project) {
         let memo = ProjectRealm(project)
@@ -17,13 +19,9 @@ class LocalDataSource {
     func fetch() -> Single<[Project]> {
         var projects = [Project]()
         return Single.create { single in
-            self.realm.objects(ProjectRealm.self).forEach { project in
-                let new = Project(id: project.id,
-                        state: ProjectState(rawValue: project.state)!,
-                        title: project.title,
-                        body: project.body,
-                        date: project.date)
-                projects.append(new)
+            self.realm.objects(ProjectRealm.self).forEach { projectRealm in
+                let project = Project(projectRealm: projectRealm)
+                projects.append(project)
             }
             single(.success(projects))
             return Disposables.create()
@@ -44,14 +42,19 @@ class LocalDataSource {
             return
         }
         try! realm.write {
+            memo.updatedAt = Date()
             realm.add(memo, update: .modified)
         }
     }
 
     func delete(_ project: Project) {
+        guard let memo = realm.objects(ProjectRealm.self).filter("id = %@", project.id).first else {
+            return
+        }
+        
         try! realm.write {
-            let memo = realm.object(ofType: ProjectRealm.self, forPrimaryKey: "\(project.id)")
-            realm.delete(memo!)
+            memo.deletedAt = Date() //어짜피 삭제되어서 할필요 없긴함
+            realm.delete(memo)
         }
     }
 }

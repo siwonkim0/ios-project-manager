@@ -7,11 +7,13 @@ struct Project {
     let title: String
     let body: String
     let date: Date
+    var deletedAt: Date? = nil
+    var updatedAt: Date = Date()
 }
 
 extension Project: Equatable {
     static func ==(lhs: Project, rhs: Project) -> Bool {
-        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.body == rhs.body && lhs.date == rhs.date && lhs.state == rhs.state
+        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.body == rhs.body && lhs.date == rhs.date && lhs.state == rhs.state && lhs.deletedAt == rhs.deletedAt && lhs.updatedAt == rhs.updatedAt
     }
 }
 
@@ -41,5 +43,18 @@ extension Project {
         self.title = title
         self.body = body
         self.date = date.dateValue()
+        self.updatedAt = Date()
+    }
+}
+
+extension Project {
+    init(projectRealm: ProjectRealm) {
+        self.id = projectRealm.id
+        self.state = ProjectState(rawValue: projectRealm.state)!
+        self.title = projectRealm.title
+        self.body = projectRealm.body
+        self.date = projectRealm.date
+        self.deletedAt = projectRealm.deletedAt
+        self.updatedAt = projectRealm.updatedAt
     }
 }
