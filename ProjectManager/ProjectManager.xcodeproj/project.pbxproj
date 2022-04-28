@@ -212,7 +212,6 @@
 			isa = PBXGroup;
 			children = (
 				C7431F0425F51E1D0094C4CF /* ProjectManager */,
-				EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */,
 				EA4C971127DB0B11002929B8 /* ProjectManagerTests */,
 				C7431F0325F51E1D0094C4CF /* Products */,
 				1EA0EEF972F63C946A1868FB /* Pods */,
@@ -243,6 +242,7 @@
 				A62BB67E27D1B553009395D8 /* Extension */,
 				EA64FA182806ECF200FB6993 /* DataSource */,
 				A62BB67F27D1B57F009395D8 /* Resource */,
+				EA577143281A6F6500016121 /* Utility */,
 			);
 			path = ProjectManager;
 			sourceTree = "<group>";
@@ -283,6 +283,14 @@
 				EA03AB2127DB4C8D00084E75 /* Test Double */,
 			);
 			path = ProjectManagerTests;
+			sourceTree = "<group>";
+		};
+		EA577143281A6F6500016121 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				EA64FA162805EB2A00FB6993 /* NetworkChecker.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		EA64FA182806ECF200FB6993 /* DataSource */ = {
@@ -647,6 +655,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HK42Z7UX9X;
 				INFOPLIST_FILE = ProjectManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -656,7 +665,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jane.ProjectManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -667,6 +676,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HK42Z7UX9X;
 				INFOPLIST_FILE = ProjectManager/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -676,7 +686,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jane.ProjectManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -22,7 +22,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
     }
     
     func fetchData() -> BehaviorRelay<[Project]> {
-//        networkConnection.isConnected = false
         if networkConnection.isConnected == true {
             self.synchronize()
                 .subscribe(onCompleted: {
@@ -52,7 +51,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let locallyAppendedProjects = localProjects.filter {
                 locallyAppendedIDSet.contains($0.id)
             }
-            print("locallyAppendedProjects", locallyAppendedProjects)
             
             let appendCompletable = Completable.zip(locallyAppendedProjects.map {
                 self.remoteDataSource.append($0)
@@ -65,7 +63,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let intersectingRemoteProjects = remoteProjects.filter {
                 intersectingIDSet.contains($0.id)
             }
-            print("intersectingLocalProjects", intersectingLocalProjects)
             
             let sameIDCompletable = Completable.zip(
                 intersectingRemoteProjects.flatMap { remoteProject in
@@ -81,13 +78,11 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let locallyDeletedProjects = remoteProjects.filter {
                 deletedIDSet.contains($0.id)
             }
-            print("locallyDeletedProjects", locallyDeletedProjects)
             let deletedCompletable = Completable.zip(locallyDeletedProjects.map {
                 self.remoteDataSource.delete($0)
             })
             return Completable.zip(appendCompletable, sameIDCompletable, deletedCompletable)
         }.flatMapCompletable { $0 }
-        
     }
     
     func append(_ project: Project) {
@@ -114,8 +109,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         if networkConnection.isConnected == true {
             Completable.zip(
                 remoteDataSource.update(project),
-                localDataSource.update(project)
-            )
+                localDataSource.update(project))
                 .subscribe(onCompleted: { [self] in
                     var currentProjects = projects.value
                     if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
@@ -135,7 +129,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                     projects.accept(currentProjects)
                 }).disposed(by: disposeBag)
         }
-        
     }
     
     func delete(_ project: Project) {
@@ -161,6 +154,5 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                     projects.accept(currentProjects)
                 }).disposed(by: disposeBag)
         }
-        
     }
 }

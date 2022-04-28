@@ -29,7 +29,7 @@ final class ProjectDetailView: UIView {
     
     let bodyTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "여기에는 할일 내용 입력하는 곳이지롱 \nㅋㅋ"
+        textView.text = ""
         textView.font = .preferredFont(forTextStyle: .title3)
         textView.layer.borderColor = UIColor.systemGray5.cgColor
         textView.layer.borderWidth = Design.borderWidth

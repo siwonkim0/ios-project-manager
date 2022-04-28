@@ -17,13 +17,44 @@ final class ProjectListViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     private var viewModel: ProjectListViewModel?
+    private var isNetworkConnected = NetworkChecker.shared.isConnected {
+        didSet {
+            checkNetworkConnection(at: isNetworkConnected)
+            print("네트워크 연결상태 확인", isNetworkConnected)
+        }
+    }
     
-    private let entireStackView: UIStackView = {
+    private let networkConnectionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "네트워크 연결이 유실되었습니다."
+        label.textAlignment = .center
+        label.textColor = .white
+        label.backgroundColor = .black
+        label.frame.size.height = 10
+        label.setContentHuggingPriority(.init(rawValue: 10), for: .vertical)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
+    
+    private let tableViewsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = Design.entireStackViewSpacing
         stackView.distribution = .fillEqually
         stackView.backgroundColor = .systemGray5
+        stackView.setContentHuggingPriority(.init(rawValue: 100000), for: .vertical)
+        stackView.setContentCompressionResistancePriority(.init(rawValue: 1000000), for: .vertical)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private let entireStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = Design.entireStackViewSpacing
+        stackView.distribution = .fill
+        stackView.spacing = 3
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -46,13 +77,24 @@ final class ProjectListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkNetworkConnection(at: isNetworkConnected)
         configureUI()
         configureTableView()
+        configureEntireStackView()
         configureLongPressGesture()
         configureBind()
         cofigureNavigationItemBind()
         configureTableViewBind()
         configureGestureBind()
+    }
+    
+    private func checkNetworkConnection(at status: Bool) {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 1) { [self] in
+                networkConnectionLabel.isHidden = status
+                print(status)
+            }
+        }
     }
     
     private func configureUI() {
@@ -70,7 +112,6 @@ final class ProjectListViewController: UIViewController {
     
     private func configureBind() {
         let input = ProjectListViewModel.Input()
-        
         let output = self.viewModel?.transform(input: input)
         
         output?.todoProjects
@@ -181,8 +222,10 @@ final class ProjectListViewController: UIViewController {
     
     private func configureEntireStackView() {
         self.view.addSubview(entireStackView)
+        self.entireStackView.addArrangedSubview(networkConnectionLabel)
+        self.entireStackView.addArrangedSubview(tableViewsStackView)
         tableViews.forEach {
-            self.entireStackView.addArrangedSubview($0)
+            self.tableViewsStackView.addArrangedSubview($0)
         }
     }
 
