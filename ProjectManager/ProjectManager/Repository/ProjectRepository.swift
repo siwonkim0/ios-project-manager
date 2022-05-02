@@ -27,7 +27,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
     }
     
     func fetchSyncronizedData() -> BehaviorRelay<[Project]> {
-//        networkConnection.isConnected = false
         if networkConnection.isConnected == true {
             self.synchronize()
                 .subscribe(onCompleted: {
@@ -35,7 +34,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                         self.projects.accept(projects)
                     }).disposed(by: self.disposeBag)
                 }).disposed(by: disposeBag)
-            
         } else {
             localDataSource.fetch()
                 .subscribe(onSuccess: { fetchedProjects in
@@ -97,16 +95,12 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                 remoteDataSource.append(project),
                 localDataSource.append(project)
             ).subscribe(onCompleted: { [self] in
-                var currentProjects = projects.value
-                currentProjects.append(project)
-                projects.accept(currentProjects)
+                getUpdatedDataFromLocalDataSource()
             }).disposed(by: disposeBag)
         } else {
             localDataSource.append(project)
             .subscribe(onCompleted: { [self] in
-                var currentProjects = projects.value
-                currentProjects.append(project)
-                projects.accept(currentProjects)
+                getUpdatedDataFromLocalDataSource()
             }).disposed(by: disposeBag)
         }
     }
@@ -117,22 +111,12 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                 remoteDataSource.update(project),
                 localDataSource.update(project))
                 .subscribe(onCompleted: { [self] in
-                    var currentProjects = projects.value
-                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-                        currentProjects[row] = project
-                    }
-                    currentProjects.sort { $0.date > $1.date }
-                    projects.accept(currentProjects)
+                    getUpdatedDataFromLocalDataSource()
                 }).disposed(by: disposeBag)
         } else {
             localDataSource.update(project)
                 .subscribe(onCompleted: { [self] in
-                    var currentProjects = projects.value
-                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-                        currentProjects[row] = project
-                    }
-                    currentProjects.sort { $0.date > $1.date }
-                    projects.accept(currentProjects)
+                    getUpdatedDataFromLocalDataSource()
                 }).disposed(by: disposeBag)
         }
     }
@@ -143,22 +127,20 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                 remoteDataSource.delete(project),
                 localDataSource.delete(project)
             ).subscribe(onCompleted: { [self] in
-                var currentProjects = projects.value
-                if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-                    currentProjects.remove(at: row)
-                }
-                projects.accept(currentProjects)
+                getUpdatedDataFromLocalDataSource()
             }).disposed(by: disposeBag)
             
         } else {
             localDataSource.delete(project)
                 .subscribe(onCompleted: { [self] in
-                    var currentProjects = projects.value
-                    if let row = currentProjects.firstIndex(where: { $0.id == project.id }) {
-                        currentProjects.remove(at: row)
-                    }
-                    projects.accept(currentProjects)
+                    getUpdatedDataFromLocalDataSource()
                 }).disposed(by: disposeBag)
         }
+    }
+    
+    private func getUpdatedDataFromLocalDataSource() {
+        self.localDataSource.fetch().subscribe(onSuccess: { p in
+            self.projects.accept(p)
+        }).disposed(by: self.disposeBag)
     }
 }
