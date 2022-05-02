@@ -19,14 +19,14 @@ final class ProjectUseCase: ProjectUseCaseProtocol {
     }
 
     func bindProjects() -> Observable<[Project]> {
-        return projectRepository.fetchData()
+        return projectRepository.fetchSyncronizedData()
             .map {
                 $0.sorted { $0.date > $1.date }
             }
     }
     
     func fetch(with id: UUID) -> Project? {
-        return projectRepository.fetchData().value
+        return projectRepository.fetchCurrentProjects()
             .filter { $0.id == id }.first
     }
     

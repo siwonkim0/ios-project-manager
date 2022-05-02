@@ -3,7 +3,8 @@ import RxSwift
 import RxRelay
 
 protocol ProjectRepositoryProtocol {
-    func fetchData() -> BehaviorRelay<[Project]>
+    func fetchCurrentProjects() -> [Project]
+    func fetchSyncronizedData() -> BehaviorRelay<[Project]>
     func append(_ project: Project)
     func update(_ project: Project)
     func delete(_ project: Project)
@@ -21,12 +22,17 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         self.localDataSource = localDataSource
     }
     
-    func fetchData() -> BehaviorRelay<[Project]> {
+    func fetchCurrentProjects() -> [Project] {
+        return projects.value
+    }
+    
+    func fetchSyncronizedData() -> BehaviorRelay<[Project]> {
+//        networkConnection.isConnected = false
         if networkConnection.isConnected == true {
             self.synchronize()
                 .subscribe(onCompleted: {
-                    self.remoteDataSource.fetch().subscribe(onSuccess: { p in
-                        self.projects.accept(p)
+                    self.remoteDataSource.fetch().subscribe(onSuccess: { projects in
+                        self.projects.accept(projects)
                     }).disposed(by: self.disposeBag)
                 }).disposed(by: disposeBag)
             
@@ -64,7 +70,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
                 intersectingIDSet.contains($0.id)
             }
             
-            let sameIDCompletable = Completable.zip(
+            let updateCompletable = Completable.zip(
                 intersectingRemoteProjects.flatMap { remoteProject in
                     intersectingLocalProjects.filter { localProject in
                         localProject.updatedAt > remoteProject.updatedAt
@@ -78,10 +84,10 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             let locallyDeletedProjects = remoteProjects.filter {
                 deletedIDSet.contains($0.id)
             }
-            let deletedCompletable = Completable.zip(locallyDeletedProjects.map {
+            let deleteCompletable = Completable.zip(locallyDeletedProjects.map {
                 self.remoteDataSource.delete($0)
             })
-            return Completable.zip(appendCompletable, sameIDCompletable, deletedCompletable)
+            return Completable.zip(appendCompletable, updateCompletable, deleteCompletable)
         }.flatMapCompletable { $0 }
     }
     

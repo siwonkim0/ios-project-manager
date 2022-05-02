@@ -263,7 +263,7 @@ final class ProjectListViewController: UIViewController {
             return
         }
         
-        guard let alert = createAlert(project: selectedProject,tableView: tableView, on: indexPath, moveTo: state) else {
+        guard let alert = createAlert(project: selectedProject, tableView: tableView, on: indexPath, moveTo: state) else {
             return
         }
         present(alert, animated: true)
