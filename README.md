@@ -4,6 +4,11 @@
 
 > 프로젝트의 CRUD 및 진행 상태 변경을 지원하는 iPad 앱으로, 로컬 & 원격 데이터베이스 저장을 통해 오프라인 환경에서도 프로젝트를 관리할 수 있습니다.
 
+## 팀원 소개
+
+- **[Jane](https://github.com/siwonkim0)**
+- **[Jiseong](https://github.com/yim2627)**
+
 ## 프로젝트 소개
 
 ### 개발 환경
