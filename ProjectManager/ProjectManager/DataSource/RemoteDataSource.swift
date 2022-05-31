@@ -26,7 +26,7 @@ class RemoteDataSource: DataSourceProtocol {
             self.dataBase
                 .collection("users")
                 .document(project.id.description)
-                .setData(project.convertToDT())
+                .setData(project.convertToDTO())
             completable(.completed)
             return Disposables.create()
         }
@@ -37,7 +37,7 @@ class RemoteDataSource: DataSourceProtocol {
             self.dataBase
                 .collection("users")
                 .document(project.id.description)
-                .updateData(project.convertToDT())
+                .updateData(project.convertToDTO())
             completable(.completed)
             return Disposables.create()
         }

@@ -34,7 +34,6 @@ class LocalDataSource: DataSourceProtocol {
             let memo = ProjectRealm(project)
             try! self.realm.write {
                 memo.updatedAt = Date()
-                print(memo.updatedAt)
                 self.realm.add(memo, update: .modified)
             }
             completable(.completed)

@@ -139,8 +139,8 @@ final class ProjectRepository: ProjectRepositoryProtocol {
     }
     
     private func getUpdatedDataFromLocalDataSource() {
-        self.localDataSource.fetch().subscribe(onSuccess: { p in
-            self.projects.accept(p)
+        self.localDataSource.fetch().subscribe(onSuccess: { project in
+            self.projects.accept(project)
         }).disposed(by: self.disposeBag)
     }
 }

@@ -18,7 +18,7 @@ extension Project: Equatable {
 }
 
 extension Project {
-    func convertToDT() -> [String: Any] {
+    func convertToDTO() -> [String: Any] {
         return ["id": self.id.uuidString,
                 "title": self.title,
                 "body": self.body,

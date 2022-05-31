@@ -180,8 +180,8 @@
 		A62BB68027D1B5B9009395D8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A6989AED27D7257200E29876 /* ProjectDetailView */,
 				A6989AEE27D7259500E29876 /* ProjectListView */,
+				A6989AED27D7257200E29876 /* ProjectDetailView */,
 			);
 			path = View;
 			sourceTree = "<group>";
