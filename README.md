@@ -6,7 +6,7 @@
 
 ## 구동 화면
 | CRUD | 
-| -------- |
+| :--: |
 | ![](https://i.imgur.com/g2WR7n6.gif) |
 | 네트워크 연결시 로컬, 원격 DB 연동 |
 | ![](https://i.imgur.com/eT1PPt3.gif)| 
