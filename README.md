@@ -24,7 +24,7 @@
 ### MVVM CleanArchitecture
 
 ![image](https://i.imgur.com/XploSuX.png)
- 
+[세부 구현내용 보러가기](https://github.com/siwonkim0/ios-project-manager/wiki/MVVM-CleanArchitecture)
 ## 프로젝트 주요 기능
 
 ### 프로젝트 CRUD
