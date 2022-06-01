@@ -1,6 +1,6 @@
 # 🗓  프로젝트 관리 앱
 
-![projectmana](https://user-images.githubusercontent.com/70251136/171104625-c3f95fe4-b258-4458-98d4-ac4150be5097.png)
+![qqqqq](https://user-images.githubusercontent.com/70251136/171319830-650a204b-3301-4378-a4f6-96654c92f7b4.png)
 
 > 프로젝트의 CRUD 및 진행 상태 변경을 지원하는 iPad 앱으로, 로컬 & 원격 데이터베이스 저장을 통해 오프라인 환경에서도 프로젝트를 관리할 수 있습니다.
 
