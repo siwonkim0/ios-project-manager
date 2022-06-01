@@ -21,6 +21,9 @@
 | Local DB - Realm | Remote DB - Firestore |
 | <img src="https://i.imgur.com/djEJ79p.png" width="600"> | <img src="https://i.imgur.com/Dv0z97I.png" width="600"> |
 
+### MVVM CleanArchitecture
+
+![image](https://i.imgur.com/XploSuX.png)
  
 ## 프로젝트 주요 기능
 
